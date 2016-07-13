@@ -20,13 +20,16 @@ public class TicketServiceImpl implements TicketService {
 
     public TicketServiceImpl(Venue venue) {
         seatsAvailable = venue.getMaxSeats();
-    }
+        
+        }
 
     @Override
     public int numSeatsAvailable() {
+    	
         return seatsAvailable;
     }
 
+   
     public int numSeatsReserved() {
         return this.seatsReserved;
     }
@@ -37,7 +40,9 @@ public class TicketServiceImpl implements TicketService {
 
         if (seatsAvailable >= numSeats) {
             String holdId = generateId();
-            SeatHold seatHold = new SeatHold(holdId, numSeats);
+            long holdableTime=getTimeStamp();
+            
+            SeatHold seatHold = new SeatHold(holdId, numSeats,holdableTime);
             optionalSeatHold = Optional.of(seatHold);
             seatHoldMap.put(holdId, seatHold);
             seatsAvailable -= numSeats;
@@ -50,7 +55,16 @@ public class TicketServiceImpl implements TicketService {
     public Optional<String> reserveSeats(String seatHoldId) {
         Optional<String> optionalReservation = Optional.empty();;
         SeatHold seatHold = seatHoldMap.get(seatHoldId);
+        
         if (seatHold != null) {
+        	long currentTime=System.currentTimeMillis();
+        	//check whether hold seat is expired.If seatHold is expired then returns in the pool of available seats
+        	if(seatHold.getHoldTime()>currentTime){	
+        		
+        		seatsAvailable+=seatHold.getNumSeats();
+        		seatHoldMap.remove(seatHoldId);
+        	}
+        	
             seatsReserved += seatHold.getNumSeats();
             optionalReservation =  Optional.of(seatHold.getId());
             seatHoldMap.remove(seatHoldId);
@@ -59,8 +73,27 @@ public class TicketServiceImpl implements TicketService {
         return optionalReservation;
     }
 
-    private String generateId() {
+    /**
+     * sets the timestamp with expiration time 5 seconds from time of holding
+     * @return holdtime in milliseconds
+     * */
+    private long getTimeStamp() {
+		
+		long heldStartTime=System.currentTimeMillis();
+		long endHoldPeriod=heldStartTime+5000L;
+		return endHoldPeriod;
+		
+	}
+    
+   
+    
+
+	private String generateId() {
         return UUID.randomUUID().toString();
     }
+    
+
+    
+   
 
 }
