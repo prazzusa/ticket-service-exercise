@@ -1,6 +1,9 @@
 package com.walmart.store.recruiting.ticket.domain;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * This POJO contains the data relevant to a successful seat hold request, including the seat hold id which
@@ -10,23 +13,32 @@ public class SeatHold {
 
     private String id;
     private int numSeats;
-    private long holdTime;
-   
-    
+    private int [] seats;
+
     /**
      * Constructor.
      *
      * @param id the unique hold identifier
      * @param numSeats the number of seats that were held.
-     * @param holdTime the time up to which the seat can be held
      */
-    public SeatHold(String id, int numSeats, long holdTime) {
+    public SeatHold(String id, int numSeats) {
         this.id = id;
         this.numSeats = numSeats;
-        this.holdTime=holdTime;
        
     }
 
+    /**
+     * 
+     * @param id
+     * @param numSeats
+     * @param seats
+     */
+    public SeatHold(String id, int numSeats, int[] seats)
+    {
+    	this.id = id;
+        this.numSeats = numSeats;
+       this.seats=seats;
+    }
     /**
      * @return the seat hold (reservation) id
      */
@@ -43,12 +55,20 @@ public class SeatHold {
     
     
 
-	public long getHoldTime() {
-		return holdTime;
+    public int[] getSeats() {
+		return seats;
 	}
 
-	public void setHoldTime(long holdTime) {
-		this.holdTime = holdTime;
+	public void setSeats(int[] seats) {
+		this.seats = seats;
+	}
+
+	public void setId(String id) {
+		this.id = id;
+	}
+
+	public void setNumSeats(int numSeats) {
+		this.numSeats = numSeats;
 	}
 
 	@Override
