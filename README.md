@@ -1,5 +1,8 @@
 # ticket-service-exercise
 
+Name: Sagar Pandey
+Email: sagar.pandey1@hotmail.com
+
 Implement a simple ticket service that facilitates the discovery, temporary hold, and final reservation of seats within a high-demand performance venue.
 
 Assume that the venue has a stage and one level of seating, as such:
